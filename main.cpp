@@ -78,8 +78,8 @@ void initFunc() {
     glGenTextures(NT,textureName);
     
     const char *filename[NT] = { "common/img/grass.bmp",
-                                 "common/img/grass_dark.bmp",
-                                 "common/img/ground_side.bmp"};
+                                 "common/img/ground_side.bmp",
+                                 "common/img/ground_side_1.bmp"};
     
     int textureW, textureH;
     
@@ -100,55 +100,6 @@ void initFunc() {
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         
     }
-    
-// Carga de objetos 3D
- // Aquí se crearían/importarían las coordenadas del modelo
-    const GLfloat vCoords[] = { -1.0, -1.0,  1.0,
-                                 1.0, -1.0,  1.0,
-                                 1.0,  1.0,  1.0,
-                                -1.0,  1.0,  1.0,
-                                -1.0, -1.0, -1.0,
-                                 1.0, -1.0, -1.0,
-                                 1.0,  1.0, -1.0,
-                                -1.0,  1.0, -1.0};
-
-    const GLfloat nCoords[] = { -1.0, -1.0,  1.0,
-                                 1.0, -1.0,  1.0,
-                                 1.0,  1.0,  1.0,
-                                -1.0,  1.0,  1.0,
-                                -1.0, -1.0, -1.0,
-                                 1.0, -1.0, -1.0,
-                                 1.0,  1.0, -1.0,
-                                -1.0,  1.0, -1.0};
-  
- // NOTA: De esta forma, tan sólo las caras delantera y trasera se texturizan correcamente.
- // Símplemente son unas coordenadas para poder asignarlas al VBO
- // Para hacerlo bien habría que usar dos GL_QUAD_STRIP de 8 vértices cada uno.
-    const GLfloat tCoords[] = {  0.0,  0.0,
-                                 1.0,  0.0,
-                                 1.0,  1.0,
-                                 0.0,  1.0,
-                                 0.0,  0.0,
-                                 1.0,  0.0,
-                                 1.0,  1.0,
-                                 0.0,  1.0};
-     
-    const GLushort iCoords[] = { 0, 1, 2, 3, 1, 5, 6, 2, 5, 4, 7, 6, 0, 3, 7, 4, 2, 6, 7, 3, 1, 0, 4, 5 };
-    
-    glGenBuffers(NB, VBO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vCoords), vCoords, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ARRAY_BUFFER, nbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(nCoords), nCoords, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ARRAY_BUFFER, tbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(tCoords), tCoords, GL_STATIC_DRAW);
-    
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(iCoords), iCoords, GL_STATIC_DRAW);
-
     
 }
 
@@ -208,16 +159,6 @@ void drawGround() {
     glMaterialfv(GL_FRONT, GL_DIFFUSE  , Kd);
     glMaterialfv(GL_FRONT, GL_SPECULAR , Ks);
     glMaterialf (GL_FRONT, GL_SHININESS, 50.0);
-    
- // Césped oscuro
-    glBindTexture(GL_TEXTURE_2D, textureName[1]);
-    glBegin(GL_QUADS);
-        glNormal3f(0.0, 1.0, 0.0);
-        glTexCoord2f(0.0, 0.0); glVertex3f( -2.0,  0.0,  -1.0);
-        glTexCoord2f(4.0, 0.0); glVertex3f( 2.0,  0.0,  -1.0);
-	glTexCoord2f(4.0, 4.0); glVertex3f(2.0,  0.0, -2.0);
-        glTexCoord2f(0.0, 4.0); glVertex3f(-2.0,  0.0, -2.0);
-    glEnd();
  
  // Césped
     glBindTexture(GL_TEXTURE_2D, textureName[0]);
@@ -238,6 +179,7 @@ void drawGround() {
 	glTexCoord2f(4.0, 4.0); glVertex3f( 10.0,  0.0,  0.0);
         glTexCoord2f(0.0, 4.0); glVertex3f( -10.0,  0.0,  0.0);
     glEnd();
+   
 }
 
 void drawObject() {
@@ -252,40 +194,68 @@ void drawObject() {
     glMaterialf (GL_FRONT, GL_SHININESS, 50.0);
     
  // Definimos el Objeto
-    glBindTexture(GL_TEXTURE_2D, textureName[1]);
     glPushMatrix();
         glTranslatef(0.0, 1.0, -2.0);
         glRotatef(angX, 1.0, 0.0, 0.0);
         glRotatef(angY, 0.0, 1.0, 0.0);
-        funCube();
+        cube();
     glPopMatrix();
-    
+    glPushMatrix();
+        glTranslatef(0.0, 3.0, -2.0);
+        glRotatef(angX, 1.0, 0.0, 0.0);
+        glRotatef(angY, 0.0, 1.0, 0.0);
+        cube();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslatef(2.0, 1.0, -2.0);
+        glRotatef(angX, 1.0, 0.0, 0.0);
+        glRotatef(angY, 0.0, 1.0, 0.0);
+        cube();
+    glPopMatrix();
 }
 
-void funCube(){
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    
-    	glBindBuffer(GL_ARRAY_BUFFER, nbuffer);
-	glNormalPointer(   GL_FLOAT, 0, 0);
-        
-        glBindBuffer(GL_ARRAY_BUFFER, tbuffer);
-        glTexCoordPointer(2, GL_FLOAT, 0, 0);
-        
-        glBindBuffer(GL_ARRAY_BUFFER, vbuffer);
-	glVertexPointer(3, GL_FLOAT, 0, 0);
-        
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibuffer);
-	glDrawElements(GL_QUADS, 24, GL_UNSIGNED_SHORT, 0);
-        
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-        
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+void cube(){
+    glBindTexture(GL_TEXTURE_2D, textureName[0]);  
+    glBegin(GL_QUADS);
+        // CARA SUPERIOR
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( 1.0,  1.0, -1.0);
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f(-1.0,  1.0, -1.0); 
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f(-1.0,  1.0,  1.0); 
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( 1.0,  1.0,  1.0);
+    glEnd();
+    glBindTexture(GL_TEXTURE_2D, textureName[1]);
+    glBegin(GL_QUADS);
+        // CARA TRASERA
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(1.0, 1.0); glVertex3f(-1.0,  1.0, -1.0);
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(0.0, 1.0); glVertex3f( 1.0,  1.0, -1.0);  
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( 1.0, -1.0, -1.0);  
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f(-1.0, -1.0, -1.0);
+        // CARA DERECHA
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(1.0, 1.0); glVertex3f( 1.0,  1.0, -1.0);
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( 1.0,  1.0,  1.0); 
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(0.0, 0.0); glVertex3f( 1.0, -1.0,  1.0); 
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( 1.0, -1.0, -1.0);   
+        // CARA IZQUIERDA
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f(-1.0,  1.0,  1.0);
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(0.0, 1.0); glVertex3f(-1.0,  1.0, -1.0);
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, -1.0, -1.0);   
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(1.0, 0.0); glVertex3f(-1.0, -1.0,  1.0);    
+        // CARA DELANTERA
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( 1.0,  1.0,  1.0);
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f(-1.0,  1.0,  1.0);
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, -1.0,  1.0);
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(1.0, 0.0); glVertex3f( 1.0, -1.0,  1.0);
+    glEnd();
+    glBindTexture(GL_TEXTURE_2D, textureName[2]);  
+    glBegin(GL_QUADS);
+        // CARA INFERIOR
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( 1.0, -1.0,  1.0);    
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f(-1.0, -1.0,  1.0);
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, -1.0, -1.0);  
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( 1.0, -1.0, -1.0);
+    glEnd();
 }
+
 
 void drawLantern(){
     

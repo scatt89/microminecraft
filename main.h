@@ -49,7 +49,7 @@ void funDisplay();
 void drawGround();
 void drawLights();
 void drawObject();
-void funCube();
+void cube();
 void drawLantern();
 void funKeyboard(int key, int x, int y);
 void funMouse(int button, int state, int x, int y);
