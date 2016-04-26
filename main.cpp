@@ -117,7 +117,7 @@ void funReshape(int w, int h) {
     glLoadIdentity();
     
  // Proyeccion en Perspectiva   
-    gluPerspective(150*zoom, (GLfloat)w/(GLfloat)h, 0.2, 50.0);
+    gluPerspective(75*zoom, (GLfloat)w/(GLfloat)h, 0.2, 100);
  
 }
 
@@ -131,8 +131,11 @@ void funDisplay(void) {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();    
     
+ // Hace posible el movimiento de rotación de la camara con las flechas izquierda y derecha
+    glRotatef(camAngle, 0.0, 1.0, 0.0);
+    
  // Posicionamos la cámara (V)
-    GLfloat pos[3]    = {0.0,  2.0,  1.0};
+    GLfloat pos[3]    = {0.0,  2.0,  zCamPosition};
     GLfloat lookat[3] = {0.0,  2.0, -10.0};
     GLfloat up[3]     = {0.0,  1.0,  0.0};
     gluLookAt(    pos[0],    pos[1],    pos[2],
@@ -196,20 +199,14 @@ void drawObject() {
  // Definimos el Objeto
     glPushMatrix();
         glTranslatef(0.0, 1.0, -2.0);
-        glRotatef(angX, 1.0, 0.0, 0.0);
-        glRotatef(angY, 0.0, 1.0, 0.0);
         cube();
     glPopMatrix();
     glPushMatrix();
         glTranslatef(0.0, 3.0, -2.0);
-        glRotatef(angX, 1.0, 0.0, 0.0);
-        glRotatef(angY, 0.0, 1.0, 0.0);
         cube();
     glPopMatrix();
     glPushMatrix();
         glTranslatef(2.0, 1.0, -2.0);
-        glRotatef(angX, 1.0, 0.0, 0.0);
-        glRotatef(angY, 0.0, 1.0, 0.0);
         cube();
     glPopMatrix();
 }
@@ -265,22 +262,28 @@ void funKeyboard(int key, int x, int y) {
     
     switch(key) {
        case GLUT_KEY_UP:
-           angX = angX + 1.0;
-           if(angX== 360.0) angX = 0.0;
+           if(zCamPosition >= -10){
+            zCamPosition -= 0.1;
+           }
            break;
        case GLUT_KEY_DOWN:
-           angX = angX - 1.0;
-           if(angX==-360.0) angX = 0.0;
+           if(zCamPosition <= 1){
+            zCamPosition += 0.1;
+           }
            break;
        case GLUT_KEY_LEFT:
-           angY = angY + 1.0;
-           if(angY== 360.0) angY = 0.0;
+           camAngle-=1.0;
+           if(camAngle == -360.0){
+               camAngle=0.0;
+           }
            break;
        case GLUT_KEY_RIGHT:
-           angY = angY - 1.0;
-           if(angY==-360.0) angY = 0.0;
+           camAngle+=1.0;
+           if(camAngle == 360.0){
+               camAngle=0.0;
+           }
            break;
-   }    
+    }
    
    glutPostRedisplay();
 

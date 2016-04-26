@@ -26,7 +26,8 @@
 #define SCREEN_COLOR     0.0, 0.0, 0.0, 0.0
 
 // Animaciones
-    GLfloat angX = 0.0, angY = 0.0, zoom =  1.0;
+    GLfloat angX = 0.0, angY = 0.0, zoom =  2.0;
+    GLfloat camAngle = 0.0, zCamPosition = 1.0;
     GLsizei current_w, current_h;
 // Luces   
     GLfloat PL0[] = { 1.0, 1.0, 1.0, 0.0 };
