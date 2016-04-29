@@ -17,6 +17,7 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <stdio.h>
+#include <math.h>
 #include "RgbImage.h"
 
 //Variables globales
@@ -26,8 +27,14 @@
 #define SCREEN_COLOR     0.0, 0.0, 0.0, 0.0
 
 // Animaciones
-    GLfloat angX = 0.0, angY = 0.0, zoom =  2.0;
-    GLfloat camAngle = 0.0, zCamPosition = 1.0;
+    GLfloat zoom =  1.0;
+    //Angulo de rotación para la dirección de la camera
+    GLfloat camAngle = 0.0;
+    //Vector que representa la dirección de la camera
+    GLfloat lx = 0.0, lz=-1.0;
+    //Posición X, Z de la camera
+    GLfloat x = 0.0, z = 5.0;
+    //Ratio de aspecto de la escena
     GLsizei current_w, current_h;
 // Luces   
     GLfloat PL0[] = { 1.0, 1.0, 1.0, 0.0 };

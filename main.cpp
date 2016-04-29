@@ -117,7 +117,7 @@ void funReshape(int w, int h) {
     glLoadIdentity();
     
  // Proyeccion en Perspectiva   
-    gluPerspective(75*zoom, (GLfloat)w/(GLfloat)h, 0.2, 100);
+    gluPerspective(45*zoom, (GLfloat)w/(GLfloat)h, 0.1f, 100.0f);
  
 }
 
@@ -131,13 +131,10 @@ void funDisplay(void) {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();    
     
- // Hace posible el movimiento de rotación de la camara con las flechas izquierda y derecha
-    glRotatef(camAngle, 0.0, 1.0, 0.0);
-    
  // Posicionamos la cámara (V)
-    GLfloat pos[3]    = {0.0,  2.0,  zCamPosition};
-    GLfloat lookat[3] = {0.0,  2.0, -10.0};
-    GLfloat up[3]     = {0.0,  1.0,  0.0};
+    GLfloat pos[3]    = {x, 3.0f, z};
+    GLfloat lookat[3] = {x+lx,  3.0f, z+lz};
+    GLfloat up[3]     = {0.0f,  1.0f,  0.0f};
     gluLookAt(    pos[0],    pos[1],    pos[2],
                lookat[0], lookat[1], lookat[2],
                    up[0],     up[1],     up[2]);
@@ -167,21 +164,12 @@ void drawGround() {
     glBindTexture(GL_TEXTURE_2D, textureName[0]);
     glBegin(GL_QUADS);
         glNormal3f(0.0, 1.0, 0.0);
-        glTexCoord2f(0.0, 0.0); glVertex3f( -10.0,  0.0,  0.0);
-        glTexCoord2f(8.0, 0.0); glVertex3f(  10.0,  0.0,  0.0);
-	glTexCoord2f(8.0, 16.0); glVertex3f( 10.0,  0.0, -8.0);
-        glTexCoord2f(0.0, 16.0); glVertex3f(-10.0,  0.0, -8.0);
+        glTexCoord2f(0.0, 0.0); glVertex3f(-100.0f, 0.0f, -100.0f);
+	glTexCoord2f(100.0, 0.0); glVertex3f(-100.0f, 0.0f,  100.0f);
+	glTexCoord2f(100.0, 100.0); glVertex3f( 100.0f, 0.0f,  100.0f);
+	glTexCoord2f(0.0, 100.0); glVertex3f( 100.0f, 0.0f, -100.0f);
     glEnd();
     
- // Tierra
-    glBindTexture(GL_TEXTURE_2D, textureName[2]);
-    glBegin(GL_QUADS);
-        glNormal3f(0.0, 0.0, 1.0);
-        glTexCoord2f(0.0, 0.0); glVertex3f( -10.0, -10.0, 0.0);
-        glTexCoord2f(4.0, 0.0); glVertex3f( 10.0, -10.0, 0.0);
-	glTexCoord2f(4.0, 4.0); glVertex3f( 10.0,  0.0,  0.0);
-        glTexCoord2f(0.0, 4.0); glVertex3f( -10.0,  0.0,  0.0);
-    glEnd();
    
 }
 
@@ -262,27 +250,26 @@ void funKeyboard(int key, int x, int y) {
     
     switch(key) {
        case GLUT_KEY_UP:
-           if(zCamPosition >= -10){
-            zCamPosition -= 0.1;
-           }
+           x += lx * 0.1;
+           z += lz * 0.1;
            break;
        case GLUT_KEY_DOWN:
-           if(zCamPosition <= 1){
-            zCamPosition += 0.1;
-           }
+           x -= lx * 0.1;
+           z -= lz * 0.1;
            break;
        case GLUT_KEY_LEFT:
-           camAngle-=1.0;
-           if(camAngle == -360.0){
-               camAngle=0.0;
-           }
+           camAngle -= 0.01;
+           lx = sin(camAngle);
+           lz = -cos(camAngle);
            break;
        case GLUT_KEY_RIGHT:
-           camAngle+=1.0;
-           if(camAngle == 360.0){
-               camAngle=0.0;
-           }
+           camAngle += 0.01f;
+           lx = sin(camAngle);
+           lz = -cos(camAngle);
            break;
+        case GLUT_KEY_F1:
+            
+            break;
     }
    
    glutPostRedisplay();
