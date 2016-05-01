@@ -42,7 +42,7 @@
     GLfloat PL0[] = { 1.0, 1.0, 1.0, 0.0 };
     GLfloat PL1[] = {-2.0, 1.0,-4.0, 1.0 };
 // Texturas
-    #define NT 3
+    #define NT 5
     GLuint textureName[NT];
 // VBOs
     #define NB 4
@@ -53,7 +53,7 @@
     #define ibuffer VBO[3]
 // Creacion de objetos
     //Controla si se ha pulsado la tecla de crear cubo
-    bool status_createCube = false;
+    bool status_createCube1 = false, status_createCube2 = false, status_createCube3 = false;
     //Controla si se ha pulsado la tecla de colocar el cubo creado en escena
     bool create_object = false;
     //Coordenadas para ubicar el objeto en escena
@@ -69,7 +69,12 @@ void funDisplay();
 void drawGround();
 void drawLights();
 void drawInitialObjects();
-void cube();
+void drawObject();
+void cube_1();
+void cube_2();
+void cube_3();
+void cloud_1();
+void cloud_2();
 void drawLantern();
 void funSpecialKeyboard(int key, int x, int y);
 void funKeyboard(unsigned char key, int x, int y);

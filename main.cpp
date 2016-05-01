@@ -80,7 +80,10 @@ void initFunc() {
     
     const char *filename[NT] = { "common/img/grass.bmp",
                                  "common/img/ground_side.bmp",
-                                 "common/img/ground_side_1.bmp"};
+                                 "common/img/ground_side_1.bmp",
+                                 "common/img/grass_dark.bmp",
+                                 "common/img/cloud1.bmp"
+    };
     
     int textureW, textureH;
     
@@ -144,28 +147,8 @@ void funDisplay(void) {
     drawLights();
     drawGround();
     drawInitialObjects();
+    drawObject();
     drawLantern();
-    
-    if(status_createCube){
-        glPushMatrix();
-            zc = z-6.0;
-            glTranslatef(xc, yc, zc);
-            cube();
-        glPopMatrix();
-        if(create_object){
-            zc = z-6.0;
-            cubes.push_back(Cube(xc, yc, zc));
-            status_createCube = false;
-            create_object = false;
-        }
-    }
-    
-    for(std::list<Cube>::iterator i = cubes.begin(); i != cubes.end(); i++){
-        glPushMatrix();
-            glTranslatef(i->getX(),i->getY(),i->getZ());
-            cube();
-        glPopMatrix();
-    }
     
  // Intercambiamos los buffers   
     glutSwapBuffers();
@@ -210,19 +193,95 @@ void drawInitialObjects() {
  // Definimos el Objeto
     glPushMatrix();
         glTranslatef(0.0, 1.0, -2.0);
-        cube();
+        cube_1();
     glPopMatrix();
     glPushMatrix();
         glTranslatef(0.0, 3.0, -2.0);
-        cube();
+        cube_1();
     glPopMatrix();
     glPushMatrix();
         glTranslatef(2.0, 1.0, -2.0);
-        cube();
+        cube_1();
+    glPopMatrix();
+    
+    glPushMatrix();
+        glTranslatef(0.0, 20, -45.0);
+        cloud_1();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslatef(-30.0, 30, -60.0);
+        glRotatef(90, 0.0, 1.0, 0.0);
+        cloud_1();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslatef(-10.0, 50, -25.0);
+        cloud_2();
     glPopMatrix();
 }
 
-void cube(){
+void drawObject() {
+    
+    if(status_createCube1){
+        glPushMatrix();
+            zc = z-6.0;
+            glTranslatef(xc, yc, zc);
+            cube_1();
+        glPopMatrix();
+        if(create_object){
+            zc = z-6.0;
+            cubes.push_back(Cube(xc, yc, zc, 1));
+            status_createCube1 = false;
+            create_object = false;
+        }
+    }
+    
+    if(status_createCube2){
+        glPushMatrix();
+            zc = z-6.0;
+            glTranslatef(xc, yc, zc);
+            cube_2();
+        glPopMatrix();
+        if(create_object){
+            zc = z-6.0;
+            cubes.push_back(Cube(xc, yc, zc, 2));
+            status_createCube2 = false;
+            create_object = false;
+        }
+    }
+    
+    if(status_createCube3){
+        glPushMatrix();
+            zc = z-6.0;
+            glTranslatef(xc, yc, zc);
+            cube_3();
+        glPopMatrix();
+        if(create_object){
+            zc = z-6.0;
+            cubes.push_back(Cube(xc, yc, zc, 3));
+            status_createCube3 = false;
+            create_object = false;
+        }
+    }
+    
+    for(std::list<Cube>::iterator i = cubes.begin(); i != cubes.end(); i++){
+        glPushMatrix();
+            glTranslatef(i->getX(),i->getY(),i->getZ());
+            switch((int)i->getCubeType()){
+                case 1:
+                    cube_1();
+                    break;
+                case 2:
+                    cube_2();
+                    break;
+                case 3:
+                    cube_3();
+                    break;
+            }
+        glPopMatrix();
+    }
+}
+
+void cube_1(){
     
     glBindTexture(GL_TEXTURE_2D, textureName[0]);  
     glBegin(GL_QUADS);
@@ -265,6 +324,139 @@ void cube(){
     glEnd();
 }
 
+void cube_2(){
+    glBindTexture(GL_TEXTURE_2D, textureName[2]);  
+    glBegin(GL_QUADS);
+        // CARA SUPERIOR
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( 1.0,  1.0, -1.0);
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f(-1.0,  1.0, -1.0); 
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f(-1.0,  1.0,  1.0); 
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( 1.0,  1.0,  1.0);
+        // CARA TRASERA
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(1.0, 1.0); glVertex3f(-1.0,  1.0, -1.0);
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(0.0, 1.0); glVertex3f( 1.0,  1.0, -1.0);  
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( 1.0, -1.0, -1.0);  
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f(-1.0, -1.0, -1.0);
+        // CARA DERECHA
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(1.0, 1.0); glVertex3f( 1.0,  1.0, -1.0);
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( 1.0,  1.0,  1.0); 
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(0.0, 0.0); glVertex3f( 1.0, -1.0,  1.0); 
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( 1.0, -1.0, -1.0);   
+        // CARA IZQUIERDA
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f(-1.0,  1.0,  1.0);
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(0.0, 1.0); glVertex3f(-1.0,  1.0, -1.0);
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, -1.0, -1.0);   
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(1.0, 0.0); glVertex3f(-1.0, -1.0,  1.0);    
+        // CARA DELANTERA
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( 1.0,  1.0,  1.0);
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f(-1.0,  1.0,  1.0);
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, -1.0,  1.0);
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(1.0, 0.0); glVertex3f( 1.0, -1.0,  1.0);
+        // CARA INFERIOR
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( 1.0, -1.0,  1.0);    
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f(-1.0, -1.0,  1.0);
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, -1.0, -1.0);  
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( 1.0, -1.0, -1.0);
+    glEnd();
+}
+
+void cube_3(){
+    glBindTexture(GL_TEXTURE_2D, textureName[3]);  
+    glBegin(GL_QUADS);
+        // CARA SUPERIOR
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( 1.0,  1.0, -1.0);
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f(-1.0,  1.0, -1.0); 
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f(-1.0,  1.0,  1.0); 
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( 1.0,  1.0,  1.0);
+        // CARA TRASERA
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(1.0, 1.0); glVertex3f(-1.0,  1.0, -1.0);
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(0.0, 1.0); glVertex3f( 1.0,  1.0, -1.0);  
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( 1.0, -1.0, -1.0);  
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f(-1.0, -1.0, -1.0);
+        // CARA DERECHA
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(1.0, 1.0); glVertex3f( 1.0,  1.0, -1.0);
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( 1.0,  1.0,  1.0); 
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(0.0, 0.0); glVertex3f( 1.0, -1.0,  1.0); 
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( 1.0, -1.0, -1.0);   
+        // CARA IZQUIERDA
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f(-1.0,  1.0,  1.0);
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(0.0, 1.0); glVertex3f(-1.0,  1.0, -1.0);
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, -1.0, -1.0);   
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(1.0, 0.0); glVertex3f(-1.0, -1.0,  1.0);    
+        // CARA DELANTERA
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( 1.0,  1.0,  1.0);
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f(-1.0,  1.0,  1.0);
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, -1.0,  1.0);
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(1.0, 0.0); glVertex3f( 1.0, -1.0,  1.0);
+        // CARA INFERIOR
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( 1.0, -1.0,  1.0);    
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f(-1.0, -1.0,  1.0);
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, -1.0, -1.0);  
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( 1.0, -1.0, -1.0);
+    glEnd();
+}
+
+void cloud_1(){
+    glColor3f(1.0, 1.0, 1.0);
+    glBegin(GL_QUADS);
+        //Cara frontal
+        glVertex3f( 0.0, 0.0, 0.0);
+        glVertex3f( 0.0, 0.5, 0.0);
+        glVertex3f( 3.0, 0.5, 0.0);
+        glVertex3f( 3.0, 0.0, 0.0);
+        //Cara arriba
+        glVertex3f( 0.0, 0.5, 0.0);
+        glVertex3f( 0.0, 0.5, -10.0);
+        glVertex3f( 3.0, 0.5, -10.0);
+        glVertex3f( 3.0, 0.5, 0.0);
+        //Cara izquierda
+        glVertex3f( 0.0, 0.0, 0.0);
+        glVertex3f( 0.0, 0.5, 0.0);
+        glVertex3f( 0.0, 0.5, -10.0);
+        glVertex3f( 0.0, 0.0, -10.0);
+        //Cara derecha
+        glVertex3f( 3.0, 0.0, 0.0);
+        glVertex3f( 3.0, 0.5, 0.0);
+        glVertex3f( 3.0, 0.5, -10.0);
+        glVertex3f( 3.0, 0.0, -10.0);
+        //Cara fondo
+        glVertex3f( 0.0, 0.0, -10.0);
+        glVertex3f( 0.0, 0.5, -10.0);
+        glVertex3f( 3.0, 0.5, -10.0);
+        glVertex3f( 3.0, 0.0, -10.0);
+        //Cara abajo
+        glVertex3f( 0.0, 0.0, 0.0);
+        glVertex3f( 0.0, 0.5, -10.0);
+        glVertex3f( 3.0, 0.5, -10.0);
+        glVertex3f( 3.0, 0.0, 0.0);
+    glEnd();
+}
+
+void cloud_2(){
+    glColor3f(0.9, 0.9, 0.9);
+    glBegin(GL_QUADS);
+        //cara abajo
+        glVertex3f( 0.0, 0.0, 0.0);
+        glVertex3f( 0.0, 0.0, -2.0);
+        glVertex3f( -2.0, 0.0, -2.0);
+        glVertex3f( -2.0, 0.0, -6.0);
+        glVertex3f( -4.0, 0.0, -6.0);
+        glVertex3f( -4.0, 0.0, -10.0);
+        glVertex3f( 4.0, 0.0, -10.0);
+        glVertex3f( 4.0, 0.0, -6.0);
+        glVertex3f( 4.0, 0.0, 0.0);
+        //cara arriba
+        glVertex3f( 0.0, 1.0, 0.0);
+        glVertex3f( 0.0, 1.0, -2.0);
+        glVertex3f( -2.0, 1.0, -2.0);
+        glVertex3f( -2.0, 1.0, -6.0);
+        glVertex3f( -4.0, 1.0, -6.0);
+        glVertex3f( -4.0, 2.0, -10.0);
+        glVertex3f( 4.0, 1.0, -10.0);
+        glVertex3f( 4.0, 1.0, -6.0);
+        glVertex3f( 4.0, 2.0, 0.0);
+    glEnd();
+}
 
 void drawLantern(){
     
@@ -313,7 +505,13 @@ void funKeyboard(unsigned char key, int x, int y) {
             yc -= 0.5;
             break;
         case '1':
-            status_createCube = true;
+            status_createCube1 = true;
+            break;
+        case '2':
+            status_createCube2 = true;
+            break;
+        case '3':
+            status_createCube3 = true;
             break;
         case 'i':
             create_object = true;
