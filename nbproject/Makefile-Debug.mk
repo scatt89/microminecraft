@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/Cube.o \
 	${OBJECTDIR}/RgbImage.o \
 	${OBJECTDIR}/main.o
 
@@ -62,6 +63,11 @@ LDLIBSOPTIONS=-L/usr/include/GL -lglut -lGL -lGLU -lGLEW
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/microminecraft: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/microminecraft ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/Cube.o: Cube.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cube.o Cube.cpp
 
 ${OBJECTDIR}/RgbImage.o: RgbImage.cpp 
 	${MKDIR} -p ${OBJECTDIR}

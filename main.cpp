@@ -17,7 +17,8 @@ int main(int argc, char** argv) {
  // Configuración CallBacks
     glutReshapeFunc(funReshape);
     glutDisplayFunc(funDisplay);
-    glutSpecialFunc(funKeyboard);
+    glutSpecialFunc(funSpecialKeyboard);
+    glutKeyboardFunc(funKeyboard);
     glutMouseFunc(funMouse);
             
  // Bucle principal
@@ -132,8 +133,8 @@ void funDisplay(void) {
     glLoadIdentity();    
     
  // Posicionamos la cámara (V)
-    GLfloat pos[3]    = {x, 3.0f, z};
-    GLfloat lookat[3] = {x+lx,  3.0f, z+lz};
+    GLfloat pos[3]    = {x, y, z};
+    GLfloat lookat[3] = {x+lx, y, z+lz};
     GLfloat up[3]     = {0.0f,  1.0f,  0.0f};
     gluLookAt(    pos[0],    pos[1],    pos[2],
                lookat[0], lookat[1], lookat[2],
@@ -142,8 +143,30 @@ void funDisplay(void) {
  // Dibujamos la escena (M)  
     drawLights();
     drawGround();
-    drawObject();
+    drawInitialObjects();
     drawLantern();
+    
+    if(status_createCube){
+        glPushMatrix();
+            zc = z-6.0;
+            glTranslatef(xc, yc, zc);
+            cube();
+        glPopMatrix();
+        if(create_object){
+            zc = z-6.0;
+            cubes.push_back(Cube(xc, yc, zc));
+            status_createCube = false;
+            create_object = false;
+        }
+    }
+    
+    for(std::list<Cube>::iterator i = cubes.begin(); i != cubes.end(); i++){
+        glPushMatrix();
+            glTranslatef(i->getX(),i->getY(),i->getZ());
+            cube();
+        glPopMatrix();
+    }
+    
  // Intercambiamos los buffers   
     glutSwapBuffers();
     
@@ -173,7 +196,7 @@ void drawGround() {
    
 }
 
-void drawObject() {
+void drawInitialObjects() {
     
  // Definimos el material del Objeto
     GLfloat Ka[] = { 0.2, 0.2, 0.2, 1.0 };
@@ -200,6 +223,7 @@ void drawObject() {
 }
 
 void cube(){
+    
     glBindTexture(GL_TEXTURE_2D, textureName[0]);  
     glBegin(GL_QUADS);
         // CARA SUPERIOR
@@ -246,7 +270,7 @@ void drawLantern(){
     
 }
 
-void funKeyboard(int key, int x, int y) {
+void funSpecialKeyboard(int key, int xx, int yy) {
     
     switch(key) {
        case GLUT_KEY_UP:
@@ -267,10 +291,34 @@ void funKeyboard(int key, int x, int y) {
            lx = sin(camAngle);
            lz = -cos(camAngle);
            break;
-        case GLUT_KEY_F1:
-            
-            break;
     }
+   
+   glutPostRedisplay();
+
+}
+
+void funKeyboard(unsigned char key, int x, int y) {
+    
+    switch(key) {
+        case 'a':
+            xc -= 0.5;
+            break;
+        case 'w':
+            yc += 0.5;
+            break;
+        case 'd':
+            xc += 0.5;
+            break;
+        case 's':
+            yc -= 0.5;
+            break;
+        case '1':
+            status_createCube = true;
+            break;
+        case 'i':
+            create_object = true;
+            break;
+   }
    
    glutPostRedisplay();
 
