@@ -82,7 +82,9 @@ void initFunc() {
                                  "common/img/ground_side.bmp",
                                  "common/img/ground_side_1.bmp",
                                  "common/img/grass_dark.bmp",
-                                 "common/img/cloud1.bmp"
+                                 "common/img/cloud1.bmp",
+                                 "common/img/rock_floor.bmp",
+                                 "common/img/wood.bmp"
     };
     
     int textureW, textureH;
@@ -182,27 +184,15 @@ void drawGround() {
 void drawInitialObjects() {
     
  // Definimos el material del Objeto
-    GLfloat Ka[] = { 0.2, 0.2, 0.2, 1.0 };
-    GLfloat Kd[] = { 0.7, 0.7, 0.3, 1.0 };
-    GLfloat Ks[] = { 0.5, 0.5, 0.5, 1.0 };
-    glMaterialfv(GL_FRONT, GL_AMBIENT  , Ka);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE  , Kd);
-    glMaterialfv(GL_FRONT, GL_SPECULAR , Ks);
-    glMaterialf (GL_FRONT, GL_SHININESS, 50.0);
+//    GLfloat Ka[] = { 0.2, 0.2, 0.2, 1.0 };
+//    GLfloat Kd[] = { 0.7, 0.7, 0.3, 1.0 };
+//    GLfloat Ks[] = { 0.5, 0.5, 0.5, 1.0 };
+//    glMaterialfv(GL_FRONT, GL_AMBIENT  , Ka);
+//    glMaterialfv(GL_FRONT, GL_DIFFUSE  , Kd);
+//    glMaterialfv(GL_FRONT, GL_SPECULAR , Ks);
+//    glMaterialf (GL_FRONT, GL_SHININESS, 50.0);
     
  // Definimos el Objeto
-    glPushMatrix();
-        glTranslatef(0.0, 1.0, -2.0);
-        cube_1();
-    glPopMatrix();
-    glPushMatrix();
-        glTranslatef(0.0, 3.0, -2.0);
-        cube_1();
-    glPopMatrix();
-    glPushMatrix();
-        glTranslatef(2.0, 1.0, -2.0);
-        cube_1();
-    glPopMatrix();
     
     glPushMatrix();
         glTranslatef(0.0, 20, -45.0);
@@ -210,13 +200,91 @@ void drawInitialObjects() {
     glPopMatrix();
     glPushMatrix();
         glTranslatef(-30.0, 30, -60.0);
-        glRotatef(90, 0.0, 1.0, 0.0);
         cloud_1();
     glPopMatrix();
     glPushMatrix();
         glTranslatef(-10.0, 50, -25.0);
         cloud_2();
     glPopMatrix();
+
+    
+    //árbol
+    glPushMatrix();
+        glTranslatef(0.0, 0.0, 0.0);
+        tree();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslatef(2.0, -2.0, -1.0);
+        tree();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslatef(0.5, -3.0, -1.5);
+        tree();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslatef(2.5, -1.5, -2.0);
+        tree();
+    glPopMatrix();
+    
+    //Templo
+    
+    //suelo
+    for(int i=1; i<=7; i++){
+        for(int j=1; j<=7; j++){
+            glPushMatrix();
+                glTranslatef(i*2.0, 0.0, j*-3.0);
+                floor();
+            glPopMatrix();
+        }
+    }
+    
+    //pared frontal
+    for(int i=4; i<=12; i=i+2){
+        if(i!=8){
+            glPushMatrix();
+                glTranslatef(i, 0.0, -6.0);
+                wood();
+            glPopMatrix();
+        }
+    }
+    
+    //pared izquierda
+    for(int i=-6; i>=-18; i=i-2){
+        glPushMatrix();
+            glTranslatef(4.0, 0.0, i);
+            glRotatef(90, 0.0, 1.0, 0.0);
+            wood();
+        glPopMatrix();
+    }
+    
+    //pared derecha
+    for(int i=-6; i>=-18; i=i-2){
+        glPushMatrix();
+            glTranslatef(14.0, 0.0, i);
+            glRotatef(90, 0.0, 1.0, 0.0);
+            wood();
+        glPopMatrix();
+    }
+    
+    //pared trasera
+    for(int i=4; i<=12; i=i+2){
+        if(i!=8){
+            glPushMatrix();
+                glTranslatef(i, 0.0, -20.0);
+                wood();
+            glPopMatrix();
+        }
+    }
+    
+    //setos delanteros
+    for(int i=2; i<=16; i=i+2){
+        if(i!=8 && i!=10){
+            glPushMatrix();
+                glTranslatef(i, 1.0, 1.0);
+                cube_3();
+            glPopMatrix();
+        }
+    }
 }
 
 void drawObject() {
@@ -458,6 +526,209 @@ void cloud_2(){
     glEnd();
 }
 
+void floor(){
+    glBindTexture(GL_TEXTURE_2D, textureName[5]);  
+    
+    GLfloat A[] = { 0.0, 0.0,  0.0 };
+    GLfloat B[] = { 0.0, 0.25, 0.0 };
+    GLfloat C[] = { 2.0, 0.25, 0.0 };
+    GLfloat D[] = { 2.0, 0.0,  0.0 };
+    GLfloat E[] = { 0.0, 0.0, -3.0 };
+    GLfloat F[] = { 0.0, 0.25,-3.0 };
+    GLfloat G[] = { 2.0, 0.0, -3.0 };
+    GLfloat H[] = { 2.0, 0.25,-3.0 };
+    
+    glBegin(GL_QUADS);
+        // CARA SUPERIOR
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( B[0], B[1], B[2] );
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( F[0], F[1], F[2] ); 
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( H[0], F[1], F[2] ); 
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( C[0], C[1], C[2] );
+        // CARA TRASERA
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(1.0, 1.0); glVertex3f( E[0], E[1], E[2] );
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(0.0, 1.0); glVertex3f( F[0], F[1], F[2] );  
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( H[0], F[1], F[2] );  
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( G[0], G[1], G[2] );
+        // CARA DERECHA
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(1.0, 1.0); glVertex3f( A[0], A[1], A[2] );
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( B[0], B[1], B[2] ); 
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(0.0, 0.0); glVertex3f( F[0], F[1], F[2] ); 
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( E[0], E[1], E[2] );   
+        // CARA IZQUIERDA
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( D[0], D[1], D[2] );
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(0.0, 1.0); glVertex3f( C[0], C[1], C[2] );
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( H[0], F[1], F[2] );   
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(1.0, 0.0); glVertex3f( G[0], G[1], G[2] );    
+        // CARA DELANTERA
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( A[0], A[1], A[2] );
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( B[0], B[1], B[2] );
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(0.0, 0.0); glVertex3f( C[0], C[1], C[2] );
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(1.0, 0.0); glVertex3f( D[0], D[1], D[2] );
+        // CARA INFERIOR
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( A[0], A[1], A[2] );    
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( E[0], E[1], E[2] );
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( G[0], G[1], G[2] );  
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( D[0], D[1], D[2] );
+    glEnd();
+}
+
+
+void wood(){
+    glBindTexture(GL_TEXTURE_2D, textureName[6]);  
+    
+    GLfloat A[] = { 0.0, 0.0, 0.0  };
+    GLfloat B[] = { 0.0, 0.0, 0.25 };
+    GLfloat C[] = { 2.0, 0.0, 0.25 };
+    GLfloat D[] = { 2.0, 0.0, 0.0  };
+    GLfloat E[] = { 0.0, 3.0, 0.0  };
+    GLfloat F[] = { 0.0, 3.0, 0.25 };
+    GLfloat G[] = { 2.0, 3.0, 0.0  };
+    GLfloat H[] = { 2.0, 3.0, 0.25 };
+    
+    glBegin(GL_QUADS);
+        // CARA SUPERIOR
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( B[0], B[1], B[2] );
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( F[0], F[1], F[2] ); 
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( H[0], F[1], F[2] ); 
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( C[0], C[1], C[2] );
+        // CARA TRASERA
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(1.0, 1.0); glVertex3f( E[0], E[1], E[2] );
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(0.0, 1.0); glVertex3f( F[0], F[1], F[2] );  
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( H[0], F[1], F[2] );  
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( G[0], G[1], G[2] );
+        // CARA DERECHA
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(1.0, 1.0); glVertex3f( A[0], A[1], A[2] );
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( B[0], B[1], B[2] ); 
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(0.0, 0.0); glVertex3f( F[0], F[1], F[2] ); 
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( E[0], E[1], E[2] );   
+        // CARA IZQUIERDA
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( D[0], D[1], D[2] );
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(0.0, 1.0); glVertex3f( C[0], C[1], C[2] );
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( H[0], F[1], F[2] );   
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(1.0, 0.0); glVertex3f( G[0], G[1], G[2] );    
+        // CARA DELANTERA
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( A[0], A[1], A[2] );
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( B[0], B[1], B[2] );
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(0.0, 0.0); glVertex3f( C[0], C[1], C[2] );
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(1.0, 0.0); glVertex3f( D[0], D[1], D[2] );
+        // CARA INFERIOR
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( A[0], A[1], A[2] );    
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( E[0], E[1], E[2] );
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( G[0], G[1], G[2] );  
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( D[0], D[1], D[2] );
+    glEnd();
+}
+
+void trunk(){
+    
+    //tronco
+    
+    GLfloat A[] = { 0.0, 0.0, 0.0 };
+    GLfloat B[] = { 0.0, 0.0,-0.5 };
+    GLfloat C[] = { 0.5, 0.0,-0.5 };
+    GLfloat D[] = { 0.5, 0.0, 0.0 };
+    GLfloat E[] = { 0.0, 6.0, 0.0 };
+    GLfloat F[] = { 0.0, 6.0,-0.5 };
+    GLfloat G[] = { 0.5, 6.0,-0.5 };
+    GLfloat H[] = { 0.5, 6.0, 0.0 };
+    
+    glBindTexture(GL_TEXTURE_2D, textureName[2]); 
+    
+    glBegin(GL_QUADS);
+        // CARA SUPERIOR
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( E[0], E[1], E[2] );
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( F[0], F[1], F[2] ); 
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( G[0], G[1], G[2] ); 
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( H[0], H[1], H[2] );
+        // CARA TRASERA
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(1.0, 1.0); glVertex3f( B[0], B[1], B[2] );
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(0.0, 1.0); glVertex3f( F[0], F[1], F[2] );  
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( G[0], G[1], G[2] );  
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( C[0], C[1], C[2] );
+        // CARA DERECHA
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(1.0, 1.0); glVertex3f( A[0], A[1], A[2] );
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( B[0], B[1], B[2] ); 
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(0.0, 0.0); glVertex3f( F[0], F[1], F[2] ); 
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( E[0], E[1], E[2] );   
+        // CARA IZQUIERDA
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( D[0], D[1], D[2] );
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(0.0, 1.0); glVertex3f( C[0], C[1], C[2] );
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( G[0], G[1], G[2] );   
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(1.0, 0.0); glVertex3f( H[0], H[1], H[2] );    
+        // CARA DELANTERA
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( A[0], A[1], A[2] );
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( E[0], E[1], E[2] );
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(0.0, 0.0); glVertex3f( H[0], H[1], H[2] );
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(1.0, 0.0); glVertex3f( D[0], D[1], D[2] );
+        // CARA INFERIOR
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( A[0], A[1], A[2] );    
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( B[0], B[1], B[2] );
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( C[0], C[1], C[2] );  
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( D[0], D[1], D[2] );
+    glEnd();
+    
+    
+    //copa
+    
+    glBindTexture(GL_TEXTURE_2D, textureName[3]);
+    
+    GLfloat AA[] = { 0.0, 0.0, 0.0 };
+    GLfloat BB[] = { 0.0, 0.0,-0.5 };
+    GLfloat CC[] = { 0.5, 0.0,-0.5 };
+    GLfloat DD[] = { 0.5, 0.0, 0.0 };
+    GLfloat EE[] = { 0.0, 2.0, 0.0 };
+    GLfloat FF[] = { 0.0, 2.0,-0.5 };
+    GLfloat GG[] = { 0.5, 2.0,-0.5 };
+    GLfloat HH[] = { 0.5, 2.0, 0.0 };
+    
+    glBegin(GL_QUADS);
+        // CARA SUPERIOR
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( BB[0], BB[1], BB[2] );
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( FF[0], FF[1], FF[2] ); 
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( GG[0], GG[1], GG[2] ); 
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( CC[0], CC[1], CC[2] );
+        // CARA TRASERA
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(1.0, 1.0); glVertex3f( BB[0], BB[1], BB[2] );
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(0.0, 1.0); glVertex3f( FF[0], FF[1], FF[2] );  
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( GG[0], GG[1], GG[2] );  
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( CC[0], CC[1], CC[2] );
+        // CARA DERECHA
+        glNormal3f( 1.0,  1.0, -1.0); glTexCoord2f(1.0, 1.0); glVertex3f( AA[0], AA[1], AA[2] );
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( BB[0], BB[1], BB[2] ); 
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(0.0, 0.0); glVertex3f( FF[0], FF[1], FF[2] ); 
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( EE[0], EE[1], EE[2] );   
+        // CARA IZQUIERDA
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( DD[0], DD[1], DD[2] );
+        glNormal3f(-1.0,  1.0, -1.0); glTexCoord2f(0.0, 1.0); glVertex3f( CC[0], CC[1], CC[2] );
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( GG[0], GG[1], GG[2] );   
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(1.0, 0.0); glVertex3f( HH[0], HH[1], HH[2] );    
+        // CARA DELANTERA
+        glNormal3f( 1.0,  1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( AA[0], AA[1], AA[2] );
+        glNormal3f(-1.0,  1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( EE[0], EE[1], EE[2] );
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(0.0, 0.0); glVertex3f( HH[0], HH[1], HH[2] );
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(1.0, 0.0); glVertex3f( DD[0], DD[1], DD[2] );
+        // CARA INFERIOR
+        glNormal3f( 1.0, -1.0,  1.0); glTexCoord2f(1.0, 1.0); glVertex3f( AA[0], AA[1], AA[2] );    
+        glNormal3f(-1.0, -1.0,  1.0); glTexCoord2f(0.0, 1.0); glVertex3f( BB[0], BB[1], BB[2] );
+        glNormal3f(-1.0, -1.0, -1.0); glTexCoord2f(0.0, 0.0); glVertex3f( CC[0], CC[1], CC[2] );  
+        glNormal3f( 1.0, -1.0, -1.0); glTexCoord2f(1.0, 0.0); glVertex3f( DD[0], DD[1], DD[2] );
+    glEnd();
+}
+
+void tree(){
+    //árbol
+    //tronco
+    glPushMatrix();
+        glTranslatef(-5.0, 0.0, -5.0);
+        trunk();
+    glPopMatrix();
+    //copa
+    glPushMatrix();
+        glTranslatef(-4.6, 6.0, -5.2);
+        cube_3();
+    glPopMatrix();
+}
+
 void drawLantern(){
     
 }
@@ -466,20 +737,20 @@ void funSpecialKeyboard(int key, int xx, int yy) {
     
     switch(key) {
        case GLUT_KEY_UP:
-           x += lx * 0.1;
-           z += lz * 0.1;
+           x += lx * 0.5;
+           z += lz * 0.5;
            break;
        case GLUT_KEY_DOWN:
-           x -= lx * 0.1;
-           z -= lz * 0.1;
+           x -= lx * 0.5;
+           z -= lz * 0.5;
            break;
        case GLUT_KEY_LEFT:
-           camAngle -= 0.01;
+           camAngle -= 0.05;
            lx = sin(camAngle);
            lz = -cos(camAngle);
            break;
        case GLUT_KEY_RIGHT:
-           camAngle += 0.01f;
+           camAngle += 0.05f;
            lx = sin(camAngle);
            lz = -cos(camAngle);
            break;

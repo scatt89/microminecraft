@@ -42,7 +42,7 @@
     GLfloat PL0[] = { 1.0, 1.0, 1.0, 0.0 };
     GLfloat PL1[] = {-2.0, 1.0,-4.0, 1.0 };
 // Texturas
-    #define NT 5
+    #define NT 7
     GLuint textureName[NT];
 // VBOs
     #define NB 4
@@ -75,6 +75,10 @@ void cube_2();
 void cube_3();
 void cloud_1();
 void cloud_2();
+void floor();
+void wood();
+void trunk();
+void tree();
 void drawLantern();
 void funSpecialKeyboard(int key, int x, int y);
 void funKeyboard(unsigned char key, int x, int y);
