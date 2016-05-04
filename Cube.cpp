@@ -11,4 +11,13 @@ Cube::Cube(GLfloat x, GLfloat y, GLfloat z, int cubeType) {
     this->y = y;
     this->z = z;
     this->cubeType = cubeType;
+    this->rotation = 0.0;
+}
+
+Cube::Cube(GLfloat x, GLfloat y, GLfloat z, GLfloat rotation, int cubeType) {
+    this->x = x;
+    this->y = y;
+    this->z = z;
+    this->cubeType = cubeType;
+    this->rotation = rotation;
 }

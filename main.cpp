@@ -192,7 +192,7 @@ void drawInitialObjects() {
 //    glMaterialfv(GL_FRONT, GL_SPECULAR , Ks);
 //    glMaterialf (GL_FRONT, GL_SHININESS, 50.0);
     
- // Definimos el Objeto
+ // Nubes
     
     glPushMatrix();
         glTranslatef(0.0, 20, -45.0);
@@ -208,7 +208,7 @@ void drawInitialObjects() {
     glPopMatrix();
 
     
-    //árbol
+    //árboles
     glPushMatrix();
         glTranslatef(0.0, 0.0, 0.0);
         tree();
@@ -285,49 +285,101 @@ void drawInitialObjects() {
             glPopMatrix();
         }
     }
+    
+    //cubos
+    glPushMatrix();
+    glTranslatef(20.0, 0.0, -15.0);
+    for(int i=1; i<=8; i=i+2){
+        for(int j=1; j<=8; j=j+2){
+            glPushMatrix();
+                glTranslatef(j, 1.0, i);
+                cube_1();
+            glPopMatrix();
+        }
+    }
+    
+    for(int i=3; i<6; i=i+2){
+        for(int j=3; j<6; j=j+2){
+            glPushMatrix();
+                glTranslatef(j, 3.0, i);
+                cube_2();
+            glPopMatrix();
+        }
+    }
+
+    glPushMatrix();
+        glTranslatef(4.0, 5.0, 4.0);
+        cube_3();
+    glPopMatrix();
+    glPopMatrix();
 }
 
 void drawObject() {
     
     if(status_createCube1){
         glPushMatrix();
-            zc = z-6.0;
-            glTranslatef(xc, yc, zc);
+            glTranslatef(x+xc, yc+y-2.0, z-6.0);
             cube_1();
         glPopMatrix();
         if(create_object){
-            zc = z-6.0;
-            cubes.push_back(Cube(xc, yc, zc, 1));
+            cubes.push_back(Cube(x+xc, yc+y-2.0, z-6.0, 1));
             status_createCube1 = false;
             create_object = false;
+            xc = 0.0; yc=0.0;
         }
     }
     
     if(status_createCube2){
         glPushMatrix();
-            zc = z-6.0;
-            glTranslatef(xc, yc, zc);
+            glTranslatef(x+xc, yc+y-2.0, z-6.0);
             cube_2();
         glPopMatrix();
         if(create_object){
-            zc = z-6.0;
-            cubes.push_back(Cube(xc, yc, zc, 2));
+            cubes.push_back(Cube(x+xc, yc+y-2.0, z-6.0, 2));
             status_createCube2 = false;
             create_object = false;
+            xc = 0.0; yc=0.0;
         }
     }
     
     if(status_createCube3){
         glPushMatrix();
-            zc = z-6.0;
-            glTranslatef(xc, yc, zc);
+            glTranslatef(x+xc, yc+y-2.0, z-6.0);
             cube_3();
         glPopMatrix();
         if(create_object){
-            zc = z-6.0;
-            cubes.push_back(Cube(xc, yc, zc, 3));
+            cubes.push_back(Cube(x+xc, yc+y-2.0, z-6.0, 3));
             status_createCube3 = false;
             create_object = false;
+            xc = 0.0; yc=0.0;
+        }
+    }
+    
+    if(status_createTable1){
+        glPushMatrix();
+            glTranslatef(x+xc, yc+y-3.0, z-6.0);
+            glRotatef(rotateAngle, 0.0, 1.0, 0.0);
+            floor();
+        glPopMatrix();
+        if(create_object){
+            cubes.push_back(Cube(x+xc, yc+y-3.0, z-6.0, rotateAngle, 4));
+            status_createTable1 = false;
+            create_object = false;
+            xc = 0.0; yc=0.0;
+        }
+    }
+    
+    if(status_createTable2){
+        glPushMatrix();
+            glTranslatef(x+xc, yc+y-3.0, z-6.0);
+            glRotatef(rotateAngle, 0.0, 1.0, 0.0);
+            wood();
+        glPopMatrix();
+        if(create_object){
+            cubes.push_back(Cube(x+xc, yc+y-3.0, z-6.0, rotateAngle, 5));
+            status_createTable2 = false;
+            create_object = false;
+            xc = 0.0; yc=0.0;
         }
     }
     
@@ -343,6 +395,14 @@ void drawObject() {
                     break;
                 case 3:
                     cube_3();
+                    break;
+                case 4:
+                    glRotatef(i->getRotation(), 0.0, 1.0, 0.0);
+                    floor();
+                    break;
+                case 5:
+                    glRotatef(i->getRotation(), 0.0, 1.0, 0.0);
+                    wood();
                     break;
             }
         glPopMatrix();
@@ -775,6 +835,13 @@ void funKeyboard(unsigned char key, int x, int y) {
         case 's':
             yc -= 0.5;
             break;
+        case 'r':
+            if(rotateAngle==360.0){
+                rotateAngle = 0.0;
+            }else{
+                rotateAngle+=90.0;   
+            }
+            break;
         case '1':
             status_createCube1 = true;
             break;
@@ -783,6 +850,12 @@ void funKeyboard(unsigned char key, int x, int y) {
             break;
         case '3':
             status_createCube3 = true;
+            break;
+        case '4':
+            status_createTable1 = true;
+            break;
+        case '5':
+            status_createTable2 = true;
             break;
         case 'i':
             create_object = true;

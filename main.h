@@ -35,7 +35,7 @@
     //Vector que representa la dirección de la camera
     GLfloat lx = 0.0, lz=-1.0;
     //Posición X, Y, Z de la camera
-    GLfloat x = 0.0, z = 5.0, y = 3.0;
+    GLfloat x = 8.7, z = 17.5, y = 3.0;
     //Ratio de aspecto de la escena
     GLsizei current_w, current_h;
 // Luces   
@@ -54,10 +54,13 @@
 // Creacion de objetos
     //Controla si se ha pulsado la tecla de crear cubo
     bool status_createCube1 = false, status_createCube2 = false, status_createCube3 = false;
+    bool status_createTable1 = false, status_createTable2 = false;
     //Controla si se ha pulsado la tecla de colocar el cubo creado en escena
     bool create_object = false;
     //Coordenadas para ubicar el objeto en escena
-    GLfloat xc = x, yc = y, zc = z-4.0;
+    GLfloat xc = 0.0, yc = 0.0;
+    //Angulo de rotación para el objeto
+    GLfloat rotateAngle = 0.0;
     //lista de cubos para dibujar en la escena
     std::list<Cube> cubes;
 
