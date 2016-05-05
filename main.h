@@ -21,6 +21,7 @@
 #include "RgbImage.h"
 #include "Cube.h"
 #include <list>
+#include <unistd.h>
 
 //Variables globales
 
@@ -42,7 +43,7 @@
     GLfloat PL0[] = { 1.0, 1.0, 1.0, 0.0 };
     GLfloat PL1[] = {-2.0, 1.0,-4.0, 1.0 };
 // Texturas
-    #define NT 7
+    #define NT 9
     GLuint textureName[NT];
 // VBOs
     #define NB 4
@@ -63,6 +64,11 @@
     GLfloat rotateAngle = 0.0;
     //lista de cubos para dibujar en la escena
     std::list<Cube> cubes;
+    //movimiento oveja
+    GLfloat sheep_mov_1 = -10.0;
+    GLfloat sheep_mov_2 = -20.0;
+    GLfloat sheep_mov_3 = 2.5;
+    bool switch_sheep_place = true, switch_sheep_jump = true;
 
       
 void initFunc();
@@ -82,10 +88,15 @@ void floor();
 void wood();
 void trunk();
 void tree();
+void sheep();
+void sheep_body();
+void sheep_face();
+void sheep_legs();
 void drawLantern();
 void funSpecialKeyboard(int key, int x, int y);
 void funKeyboard(unsigned char key, int x, int y);
 void funMouse(int button, int state, int x, int y);
+void funIdle();
 
 inline void destroyFunc() {  
     glDeleteTextures(NT,textureName);
