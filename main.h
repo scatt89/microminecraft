@@ -42,6 +42,7 @@
 // Luces   
     GLfloat PL0[] = { 1.0, 1.0, 1.0, 0.0 };
     GLfloat PL1[] = {-2.0, 1.0,-4.0, 1.0 };
+
 // Texturas
     #define NT 9
     GLuint textureName[NT];

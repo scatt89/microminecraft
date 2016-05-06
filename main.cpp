@@ -51,7 +51,7 @@ void initFunc() {
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, IA);
     
  // Parámetros de la Luz 0 (direccional=sol)
-    GLfloat Ia0[] = { 0.5, 0.5, 0.5, 1.0 };
+    GLfloat Ia0[] = { 0.6, 0.6, 0.6, 1.0 };
     GLfloat Id0[] = { 0.9, 0.9, 0.9, 1.0 };
     GLfloat Is0[] = { 0.5, 0.5, 0.5, 1.0 };
     glLightfv(GL_LIGHT0, GL_AMBIENT , Ia0);
@@ -59,18 +59,7 @@ void initFunc() {
     glLightfv(GL_LIGHT0, GL_SPECULAR, Is0);
     glEnable(GL_LIGHT0);
     
- // Parámetros de la Luz 1 (posicional=bombilla)
-    GLfloat Ia1[] = { 0.5, 0.5, 0.5, 1.0 };
-    GLfloat Id1[] = { 0.8, 0.8, 0.8, 1.0 };
-    GLfloat Is1[] = { 0.7, 0.7, 0.7, 1.0 };
-    glLightfv(GL_LIGHT1, GL_AMBIENT , Ia1);
-    glLightfv(GL_LIGHT1, GL_DIFFUSE , Id1);
-    glLightfv(GL_LIGHT1, GL_SPECULAR, Is1);
-    glLightf (GL_LIGHT1, GL_CONSTANT_ATTENUATION , 0.90);
-    glLightf (GL_LIGHT1, GL_LINEAR_ATTENUATION   , 0.05);
-    glLightf (GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.01);
-    glEnable(GL_LIGHT1);
-    
+
  // Modelo de Sombreado
     glShadeModel(GL_SMOOTH);
     glEnable(GL_NORMALIZE);
@@ -162,7 +151,7 @@ void funDisplay(void) {
 
 void drawGround() {
     
- // Definimos del suelo
+  //Definimos del suelo
     GLfloat Ka[] = { 0.2, 0.2, 0.2, 1.0 };
     GLfloat Kd[] = { 0.7, 0.7, 0.7, 1.0 };
     GLfloat Ks[] = { 0.8, 0.8, 0.8, 1.0 };
@@ -187,16 +176,16 @@ void drawGround() {
 void drawInitialObjects() {
     
  // Definimos el material del Objeto
-//    GLfloat Ka[] = { 0.2, 0.2, 0.2, 1.0 };
-//    GLfloat Kd[] = { 0.7, 0.7, 0.3, 1.0 };
-//    GLfloat Ks[] = { 0.5, 0.5, 0.5, 1.0 };
-//    glMaterialfv(GL_FRONT, GL_AMBIENT  , Ka);
-//    glMaterialfv(GL_FRONT, GL_DIFFUSE  , Kd);
-//    glMaterialfv(GL_FRONT, GL_SPECULAR , Ks);
-//    glMaterialf (GL_FRONT, GL_SHININESS, 50.0);
+    GLfloat Ka[] = { 0.2, 0.2, 0.2, 1.0 };
+    GLfloat Kd[] = { 0.7, 0.7, 0.6, 1.0 };
+    GLfloat Ks[] = { 0.5, 0.5, 0.5, 1.0 };
+    glMaterialfv(GL_FRONT, GL_AMBIENT  , Ka);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE  , Kd);
+    glMaterialfv(GL_FRONT, GL_SPECULAR , Ks);
+    glMaterialf (GL_FRONT, GL_SHININESS, 50.0);
     
  // Nubes
-    
+    glDisable(GL_LIGHTING);
     glPushMatrix();
         glTranslatef(0.0, 20, -45.0);
         cloud_1();
@@ -209,6 +198,7 @@ void drawInitialObjects() {
         glTranslatef(-10.0, 50, -25.0);
         cloud_2();
     glPopMatrix();
+    glEnable(GL_LIGHTING);
 
     
     //árboles
@@ -565,7 +555,7 @@ void cube_3(){
 }
 
 void cloud_1(){
-    glColor3f(1.0, 1.0, 1.0);
+    glColor3f(0.9, 0.9, 0.9);
     glBegin(GL_QUADS);
         //Cara frontal
         glVertex3f( 0.0, 0.0, 0.0);
