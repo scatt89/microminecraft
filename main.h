@@ -46,13 +46,7 @@
 // Texturas
     #define NT 9
     GLuint textureName[NT];
-// VBOs
-    #define NB 4
-    GLuint  VBO[NB];
-    #define vbuffer VBO[0]
-    #define nbuffer VBO[1]
-    #define tbuffer VBO[2]
-    #define ibuffer VBO[3]
+
 // Creacion de objetos
     //Controla si se ha pulsado la tecla de crear cubo
     bool status_createCube1 = false, status_createCube2 = false, status_createCube3 = false;
