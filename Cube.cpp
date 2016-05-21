@@ -1,3 +1,10 @@
+/* 
+ * File:   Cube.cpp
+ * Author: Marrarichy Da Silva Garcia
+ *
+ * Created on 24 de abril de 2016, 0:42
+ */
+
 #include "Cube.h"
 
 Cube::Cube(){

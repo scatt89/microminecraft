@@ -1,3 +1,10 @@
+/* 
+ * File:   Cube.h
+ * Author: Marrarichy Da Silva Garcia
+ *
+ * Created on 24 de abril de 2016, 0:42
+ */
+
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 

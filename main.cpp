@@ -1,3 +1,10 @@
+/* 
+ * File:   main.cpp
+ * Author: Marrarichy Da Silva Garcia
+ *
+ * Created on 24 de abril de 2016, 0:42
+ */
+
 #include "main.h"
 
 int main(int argc, char** argv) {
